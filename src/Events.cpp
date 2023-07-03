@@ -20,7 +20,8 @@ namespace Events {
         if (a_event->cause) {
             if (a_event->cause->IsPlayerRef()) {
                 if (auto targ = a_event->target.get(); targ->As<RE::Actor>()) {
-                    if (!player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand]) {
+                    if (!player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand] &&
+                        player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand]) {
                         if (const auto equipped_right = player->GetEquippedObject(false)) {
                             if (const auto weapon = equipped_right->As<RE::TESObjectWEAP>();
                                 weapon->IsOneHandedSword() || weapon->IsOneHandedAxe() || weapon->IsOneHandedMace()) {
@@ -30,7 +31,7 @@ namespace Events {
                                     const auto magicka_av =
                                         player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
                                     if (magicka_pct <= Settings::trigger_value && player->IsInCombat()) {
-                                        logger::info("Magicka Percentage is {}", magicka_pct);
+                                        //logger::info("Magicka Percentage is {}", magicka_pct);
                                         player->AsActorValueOwner()->RestoreActorValue(
                                             RE::ACTOR_VALUE_MODIFIER::kDamage, av_to_heal,
                                             player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
