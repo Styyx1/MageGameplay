@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Settings.h"
+
 class Utility {
 protected:
     Utility() = default;
@@ -18,6 +20,7 @@ public:
 
     inline static RE::TESConditionItem cond_item;
     inline static RE::TESCondition is_power_attacking;
+    inline static RE::BGSPerk* AbsorbPerk;
     
 
     static void InitUtility() {

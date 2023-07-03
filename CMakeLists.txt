@@ -21,7 +21,8 @@ configure_file(
 
 set(PUBLIC_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}")
 set(headers
-        include/Utility.h)
+        include/Utility.h
+        include/FormLookup.h)
 
 set(sources
         src/Logging.cpp

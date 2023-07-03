@@ -16,5 +16,4 @@ public:
 
     inline static float trigger_value = 50.0;
     inline static float regeneration_value = 0.5;
-    
 };

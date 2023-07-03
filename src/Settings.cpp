@@ -1,13 +1,14 @@
 #include "Settings.h"
+#include "Utility.h"
+#include <SimpleIni.h>
 
-#include "SimpleIni.h"
-
-Settings* Settings::GetSingleton() {
+Settings* Settings::GetSingleton() 
+{
     static Settings singleton;
     return std::addressof(singleton);
 }
-
-void Settings::LoadSettings() {
+void Settings::LoadSettings() 
+{
     logger::info("Loading settings");
 
     CSimpleIniA ini;
@@ -17,8 +18,4 @@ void Settings::LoadSettings() {
 
     trigger_value = ini.GetDoubleValue("General", "bTriggerValue");
     regeneration_value = ini.GetDoubleValue("General", "bRegenerationValue");
-
-    
-
-    logger::info("Loaded settings");
 }
