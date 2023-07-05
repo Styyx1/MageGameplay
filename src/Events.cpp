@@ -37,12 +37,12 @@ namespace Events {
                                     if (a_event->source == player->GetActorRuntimeData()
                                                                .selectedSpells[RE::Actor::SlotTypes::kLeftHand]
                                                                ->GetFormID()) {
-                                        logger::info("noticed projectile");
+                                        //logger::info("noticed projectile");
                                         if (const auto equipped_left = player->GetEquippedObject(true)) {
                                             if (!equipped_left->IsWeapon() &&
                                                 player->GetActorRuntimeData()
                                                     .selectedSpells[RE::Actor::SlotTypes::kLeftHand]) {
-                                                logger::info("event ready for spell");
+                                                //logger::info("event ready for spell");
                                                 if (auto stam_pct =
                                                         Hooks::GetActorValuePercent(player->As<RE::Actor>(),
                                                                                     RE::ActorValue::kStamina) *
@@ -55,7 +55,7 @@ namespace Events {
                                                             player->AsActorValueOwner()->GetBaseActorValue(
                                                                 RE::ActorValue::kStamina) *
                                                                 modifier);
-                                                        logger::info("healed stamina");
+                                                        //logger::info("healed stamina");
                                                     }
                                                 }
                                             }
