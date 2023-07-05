@@ -10,7 +10,8 @@ void Listener(SKSE::MessagingInterface::Message* message) {
         Events::OnHitEventHandler::Register();
         Settings::LoadSettings(); 
         FormLookup::LoadPerk();
-        Utility::InitUtility();               
+        Utility::InitUtility(); 
+        //FormLookup::AdjustScrolls();
     }
 }
 

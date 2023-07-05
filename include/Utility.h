@@ -21,6 +21,7 @@ public:
     inline static RE::TESConditionItem cond_item;
     inline static RE::TESCondition is_power_attacking;
     inline static RE::BGSPerk* AbsorbPerk;
+    inline static RE::SpellItem* Spells;
     
 
     static void InitUtility() {
