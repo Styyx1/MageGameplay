@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Utility.h"
+#include "Settings.h"
 
 
 namespace FormLookup {
 
     static void LoadPerk() {
-        const auto& settings = Settings::GetSingleton();
+        
+        const auto settings = Settings::GetSingleton();
         const auto handler = RE::TESDataHandler::GetSingleton();
         const auto utility = Utility::GetSingleton();
         utility->AbsorbPerk = handler->LookupForm(settings->activation_perk, settings->perk_mod_name)->As<RE::BGSPerk>();        
