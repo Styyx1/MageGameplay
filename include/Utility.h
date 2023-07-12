@@ -23,10 +23,12 @@ public:
         const auto util = Utility::GetSingleton();
         const auto spell_form_list = util->spell_formlist;
         auto spell = player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand];
-        if (Utility::is_in_list(spell->AsReference(), Utility::spell_formlist->AsReference())) { 
-            
+        
+        if (Utility::is_in_list(spell_form_list->AsReference(), spell->AsReference())) {
             return true;
-        }
+        } 
+        else
+            return false;
     }
     inline static RE::MagicItem* WardCast() 
     { 
@@ -35,7 +37,8 @@ public:
         if (Utility::WardSpell()) {
             logger::info("Ward spell = {}", spell->GetName());
             return spell;
-        }
+        } else
+            return nullptr;
     
     }
 

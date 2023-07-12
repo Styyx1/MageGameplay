@@ -20,7 +20,7 @@ namespace FormLookup {
         const auto handler = RE::TESDataHandler::GetSingleton();
         const auto utility = Utility::GetSingleton();
         utility->spell_formlist = handler->LookupForm(0x801, "MageGameplayOverhaul.esp")->As<RE::BGSListForm>();
-        logger::info("Loaded Formlist: {}", utility->spell_formlist->GetFormEditorID());
+        logger::info("Loaded Formlist");
     }
 
     static void AdjustScrolls() {
@@ -37,10 +37,10 @@ namespace FormLookup {
     static void LoadSpells() 
     { 
         const auto handler = RE::TESDataHandler::GetSingleton();
-        const auto utility = Utility::GetSingleton();
-        
-        utility->Spells = handler->LookupForm(0x13018, "Skyrim.esm")->As<RE::SpellItem>();
-        logger::info("Loaded Spell: {}", utility->Spells->GetName());    
+        const auto utility = Utility::GetSingleton();               
+        utility->spell_formlist = handler->LookupForm<RE::BGSListForm>(0x801, "MageGameplayOverhaul.esp");
+        ;
+        logger::info("Loaded Spell");    
     }
 
 }   // namespace FormLookup 

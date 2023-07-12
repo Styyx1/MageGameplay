@@ -79,7 +79,7 @@ namespace Events {
         }
         if (a_event->target) {
             if (a_event->target.get() == RE::PlayerCharacter::GetSingleton()) {
-                if (Utility::WardSpell() && player->IsCasting(Utility::WardCast())) {
+                if (player->IsCasting(Utility::Spells)) {
                     if (auto magicka_pct =
                             Hooks::GetActorValuePercent(player->As<RE::Actor>(), RE::ActorValue::kMagicka) * 100;
                         const auto magicka_av = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {

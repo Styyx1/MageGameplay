@@ -13,6 +13,7 @@ void Listener(SKSE::MessagingInterface::Message* message) {
         logger::info("PerkID = {}", Settings::activation_perk);
         FormLookup::LoadPerk();
         FormLookup::LoadSpells();
+        //FormLookup::LoadFormList();
         //FormLookup::AdjustScrolls();
         
         
