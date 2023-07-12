@@ -16,11 +16,11 @@ void Settings::LoadSettings()
     ini.SetUnicode();
     ini.LoadFile(R"(.\Data\SKSE\Plugins\MageGameplay.ini)");
 
-    trigger_value = ini.GetDoubleValue("General", "bTriggerValue");
-    attack_regeneration_value = ini.GetDoubleValue("General", "bAttackRegenerationValue");
-    block_regeneration_value = ini.GetDoubleValue("General", "bBlockRegenerationValue");
-    cast_regeneration_value = ini.GetDoubleValue("General", "bCastRegenerationValue");
-    activation_perk = ini.GetDoubleValue("Perk", "bActivationPerk");
-    perk_mod_name = ini.GetValue("Perk", "bPerkModName");
+    trigger_value = ini.GetDoubleValue("General", "fTriggerValue");
+    attack_regeneration_value = ini.GetDoubleValue("General", "fAttackRegenerationValue");
+    block_regeneration_value = ini.GetDoubleValue("General", "fBlockRegenerationValue");
+    cast_regeneration_value = ini.GetDoubleValue("General", "fCastRegenerationValue");
+    activation_perk = std::atoi(ini.GetValue("Perk", "uActivationPerk"));
+    perk_mod_name = ini.GetValue("Perk", "sPerkModName");
 
 }
