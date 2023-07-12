@@ -9,9 +9,10 @@ namespace FormLookup {
     static void LoadPerk() {
         
         const auto settings = Settings::GetSingleton();
+        logger::info("PerkID with FormLookup = {}", settings->activation_perk);
         const auto handler = RE::TESDataHandler::GetSingleton();
         const auto utility = Utility::GetSingleton();
-        utility->AbsorbPerk = handler->LookupForm(settings->activation_perk, settings->perk_mod_name)->As<RE::BGSPerk>();        
+        utility->AbsorbPerk = handler->LookupForm(0xbabe4, Settings::perk_mod_name)->As<RE::BGSPerk>();        
         logger::info("Loaded AbsorbPerk: {}", utility->AbsorbPerk->GetName());
     }
 

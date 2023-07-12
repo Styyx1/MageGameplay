@@ -32,8 +32,7 @@ namespace Events {
                                 if (auto magicka_pct =
                                         Hooks::GetActorValuePercent(player->As<RE::Actor>(), RE::ActorValue::kMagicka) *
                                         100;
-                                    const auto magicka_av =
-                                        player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
+                                    const auto magicka_av = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
                                     if (a_event->source == player->GetActorRuntimeData()
                                                                .selectedSpells[RE::Actor::SlotTypes::kLeftHand]
                                                                ->GetFormID()) {

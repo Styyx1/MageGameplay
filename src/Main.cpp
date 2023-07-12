@@ -8,9 +8,10 @@
 void Listener(SKSE::MessagingInterface::Message* message) {
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
         Events::OnHitEventHandler::Register();
-        Settings::LoadSettings(); 
+        Utility::InitUtility();
+        Settings::LoadSettings();
+        logger::info("PerkID = {}", Settings::activation_perk);
         FormLookup::LoadPerk();
-        Utility::InitUtility(); 
         FormLookup::LoadSpells();
         //FormLookup::AdjustScrolls();
         

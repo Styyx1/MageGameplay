@@ -19,5 +19,6 @@ public:
     inline static float block_regeneration_value = 2.0;
     inline static float cast_regeneration_value = 1.0;
     inline static std::uint32_t activation_perk = 0x800;
+    
     inline static std::string_view perk_mod_name = "MageGamplayOverhaul.esp";
 };

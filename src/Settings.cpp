@@ -20,7 +20,10 @@ void Settings::LoadSettings()
     attack_regeneration_value = ini.GetDoubleValue("General", "fAttackRegenerationValue");
     block_regeneration_value = ini.GetDoubleValue("General", "fBlockRegenerationValue");
     cast_regeneration_value = ini.GetDoubleValue("General", "fCastRegenerationValue");
-    activation_perk = std::atoi(ini.GetValue("Perk", "uActivationPerk"));
+    activation_perk = std::uint32_t(ini.GetValue("Perk", "uActivationPerk"));
+    
+    logger::info("PerkID = {}", Settings::activation_perk);
+    
     perk_mod_name = ini.GetValue("Perk", "sPerkModName");
 
 }

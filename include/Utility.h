@@ -41,6 +41,6 @@ public:
         
         
         is_power_attacking.head = &cond_item;
-        
+        logger::info("Utility initialised");
     }
 };
