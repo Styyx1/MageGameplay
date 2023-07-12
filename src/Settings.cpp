@@ -17,5 +17,10 @@ void Settings::LoadSettings()
     ini.LoadFile(R"(.\Data\SKSE\Plugins\MageGameplay.ini)");
 
     trigger_value = ini.GetDoubleValue("General", "bTriggerValue");
-    regeneration_value = ini.GetDoubleValue("General", "bRegenerationValue");
+    attack_regeneration_value = ini.GetDoubleValue("General", "bAttackRegenerationValue");
+    block_regeneration_value = ini.GetDoubleValue("General", "bBlockRegenerationValue");
+    cast_regeneration_value = ini.GetDoubleValue("General", "bCastRegenerationValue");
+    activation_perk = ini.GetDoubleValue("Perk", "bActivationPerk");
+    perk_mod_name = ini.GetValue("Perk", "bPerkModName");
+
 }

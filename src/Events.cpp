@@ -15,20 +15,20 @@ namespace Events {
         if (!a_event) return RE::BSEventNotifyControl::kContinue;
         
         auto av_to_heal = RE::ActorValue::kMagicka;        
-        auto modifier = Settings::regeneration_value * 0.01;  
-        const auto player = RE::PlayerCharacter::GetSingleton(); 
-
-       
+        auto attack_modifier = Settings::attack_regeneration_value * 0.01;  
+        auto block_modifier = Settings::block_regeneration_value * 0.01;
+        auto cast_modifier = Settings::cast_regeneration_value * 0.01;
+        const auto player = RE::PlayerCharacter::GetSingleton();       
 
         if (a_event->cause) {
-            if (a_event->cause->IsPlayerRef()) {                              
+            if (a_event->cause->IsPlayerRef()) {
                 if (auto targ = a_event->target.get(); targ->As<RE::Actor>()) {
-                      
                     if (!player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand] &&
-                        player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand] && player->HasPerk(Utility::AbsorbPerk)) {
+                        player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand] &&
+                        player->HasPerk(Utility::AbsorbPerk)) {
                         if (const auto equipped_right = player->GetEquippedObject(false)) {
                             if (const auto weapon = equipped_right->As<RE::TESObjectWEAP>();
-                                weapon->IsOneHandedSword() || weapon->IsOneHandedAxe() || weapon->IsOneHandedMace()) {                                
+                                weapon->IsOneHandedSword() || weapon->IsOneHandedAxe() || weapon->IsOneHandedMace()) {
                                 if (auto magicka_pct =
                                         Hooks::GetActorValuePercent(player->As<RE::Actor>(), RE::ActorValue::kMagicka) *
                                         100;
@@ -37,12 +37,12 @@ namespace Events {
                                     if (a_event->source == player->GetActorRuntimeData()
                                                                .selectedSpells[RE::Actor::SlotTypes::kLeftHand]
                                                                ->GetFormID()) {
-                                        //logger::info("noticed projectile");
+                                        // logger::info("noticed projectile");
                                         if (const auto equipped_left = player->GetEquippedObject(true)) {
                                             if (!equipped_left->IsWeapon() &&
                                                 player->GetActorRuntimeData()
                                                     .selectedSpells[RE::Actor::SlotTypes::kLeftHand]) {
-                                                //logger::info("event ready for spell");
+                                                // logger::info("event ready for spell");
                                                 if (auto stam_pct =
                                                         Hooks::GetActorValuePercent(player->As<RE::Actor>(),
                                                                                     RE::ActorValue::kStamina) *
@@ -54,29 +54,48 @@ namespace Events {
                                                             RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina,
                                                             player->AsActorValueOwner()->GetBaseActorValue(
                                                                 RE::ActorValue::kStamina) *
-                                                                modifier);
-                                                        //logger::info("healed stamina");
+                                                                cast_modifier);
+                                                        logger::info("Absorbed {} % of stamina with casting",
+                                                                     cast_modifier * 100);
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    if (magicka_pct <= Settings::trigger_value && player->IsInCombat() && a_event->source == weapon->GetFormID()) {
-                                        //logger::info("Magicka Percentage is {}", magicka_pct);
+                                    if (magicka_pct <= Settings::trigger_value && player->IsInCombat() &&
+                                        a_event->source == weapon->GetFormID()) {
+                                        // logger::info("Magicka Percentage is {}", magicka_pct);
                                         player->AsActorValueOwner()->RestoreActorValue(
                                             RE::ACTOR_VALUE_MODIFIER::kDamage, av_to_heal,
                                             player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
-                                                modifier);
+                                                attack_modifier);
+                                        logger::info("Absorbed {} % of magicka with attacking", attack_modifier * 100);
                                     }
                                 }
                             }
                         }
-                       
-                    }                     
-                }                
-            }             
+                    }
+                }
+            }           
         }
-        
+        if (a_event->target) {
+            if (a_event->target.get() == RE::PlayerCharacter::GetSingleton()) {
+                if (player->IsCasting(Utility::Spells)) {
+                    if (auto magicka_pct =
+                            Hooks::GetActorValuePercent(player->As<RE::Actor>(), RE::ActorValue::kMagicka) * 100;
+                        const auto magicka_av = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
+                        if (magicka_pct <= Settings::trigger_value && player->IsInCombat()) {
+                            // logger::info("Magicka Percentage is {}", magicka_pct);
+                            player->AsActorValueOwner()->RestoreActorValue(
+                                RE::ACTOR_VALUE_MODIFIER::kDamage, av_to_heal,
+                                player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
+                                    block_modifier);
+                            logger::info("Absorbed {} % of magicka with blocking", block_modifier * 100);
+                        }
+                    }
+                }
+            }
+        }
         
         return RE::BSEventNotifyControl::kContinue;
     }
@@ -87,31 +106,3 @@ namespace Events {
         logger::info("Registered hit event handler");
     }
 }
-
-
-
-/*
-
-
-
- if (const auto equipped_left = player->GetEquippedObject(true)) {
-                            if (!equipped_left->IsWeapon() &&
-                                player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand]) {
-                                if (auto stam_pct = Hooks::GetActorValuePercent(player->As<RE::Actor>(),
- RE::ActorValue::kStamina) * 100; const auto stamina_av =
-                                        player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina)) {
-                                    if (stam_pct <= Settings::trigger_value && player->IsInCombat()) {
-                                        player->AsActorValueOwner()->RestoreActorValue(
-                                            RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina,
-                                            player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kStamina) *
-                                                modifier);
-                                    }
-                                }
-                            }
-                        }
-
-
-
-
-
-*/

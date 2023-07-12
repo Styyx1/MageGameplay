@@ -11,7 +11,10 @@ void Listener(SKSE::MessagingInterface::Message* message) {
         Settings::LoadSettings(); 
         FormLookup::LoadPerk();
         Utility::InitUtility(); 
+        FormLookup::LoadSpells();
         //FormLookup::AdjustScrolls();
+        
+        
     }
 }
 

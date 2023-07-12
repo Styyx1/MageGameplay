@@ -18,10 +18,21 @@ public:
         return std::addressof(singleton);
     }
 
+    static bool WardSpell() { 
+        const auto player = RE::PlayerCharacter::GetSingleton();
+        auto spell = player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand];
+        const auto keyword_wards = spell->HasKeyword(ward_keyword);
+        if (keyword_wards)
+        {
+            return true;
+        }
+    }
+
     inline static RE::TESConditionItem cond_item;
     inline static RE::TESCondition is_power_attacking;
     inline static RE::BGSPerk* AbsorbPerk;
     inline static RE::SpellItem* Spells;
+    inline static RE::BGSKeyword* ward_keyword;
     
 
     static void InitUtility() {
