@@ -12,8 +12,15 @@ namespace FormLookup {
         logger::info("PerkID with FormLookup = {}", settings->activation_perk);
         const auto handler = RE::TESDataHandler::GetSingleton();
         const auto utility = Utility::GetSingleton();
-        utility->AbsorbPerk = handler->LookupForm(0xbabe4, Settings::perk_mod_name)->As<RE::BGSPerk>();        
+        utility->AbsorbPerk = handler->LookupForm(Settings::ActivationPerkFormID, Settings::perk_mod_name)->As<RE::BGSPerk>();        
         logger::info("Loaded AbsorbPerk: {}", utility->AbsorbPerk->GetName());
+    }
+
+    static void LoadFormList() { 
+        const auto handler = RE::TESDataHandler::GetSingleton();
+        const auto utility = Utility::GetSingleton();
+        utility->spell_formlist = handler->LookupForm(0x801, "MageGameplayOverhaul.esp")->As<RE::BGSListForm>();
+        logger::info("Loaded Formlist: {}", utility->spell_formlist->GetFormEditorID());
     }
 
     static void AdjustScrolls() {

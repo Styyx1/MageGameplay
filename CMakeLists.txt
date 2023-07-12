@@ -14,6 +14,7 @@ set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 
 include(GNUInstallDirs)
 
+
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in
         ${CMAKE_CURRENT_BINARY_DIR}/version.rc
@@ -46,6 +47,8 @@ find_package(CommonLibSSE REQUIRED)
 
 add_commonlibsse_plugin(${PROJECT_NAME} SOURCES ${headers} ${sources})
 add_library("${PROJECT_NAME}::${PROJECT_NAME}" ALIAS "${PROJECT_NAME}")
+
+
 
 target_include_directories(${PROJECT_NAME}
         PRIVATE

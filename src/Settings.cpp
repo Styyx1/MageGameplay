@@ -20,10 +20,21 @@ void Settings::LoadSettings()
     attack_regeneration_value = ini.GetDoubleValue("General", "fAttackRegenerationValue");
     block_regeneration_value = ini.GetDoubleValue("General", "fBlockRegenerationValue");
     cast_regeneration_value = ini.GetDoubleValue("General", "fCastRegenerationValue");
-    activation_perk = std::uint32_t(ini.GetValue("Perk", "uActivationPerk"));
+    std::string activation_perk = ini.GetValue("Perk", "uActivationPerk");
     
-    logger::info("PerkID = {}", Settings::activation_perk);
+    if (!activation_perk.empty()) {
+        ActivationPerkFormID = ParseFormID(activation_perk);
+    }
+
+    logger::info("PerkID = {}", Settings::ActivationPerkFormID);
     
     perk_mod_name = ini.GetValue("Perk", "sPerkModName");
 
+    
+}
+RE::FormID Settings::ParseFormID(const std::string& str) {
+    RE::FormID result;
+    std::istringstream ss{str};
+    ss >> std::hex >> result;
+    return result;
 }

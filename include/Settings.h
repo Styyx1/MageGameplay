@@ -18,7 +18,15 @@ public:
     inline static float attack_regeneration_value = 0.5;
     inline static float block_regeneration_value = 2.0;
     inline static float cast_regeneration_value = 1.0;
-    inline static std::uint32_t activation_perk = 0x800;
-    
+    inline static std::string activation_perk;
+    inline static RE::BGSPerk* ActivationPerk;
+    inline static RE::FormID ActivationPerkFormID;
+
     inline static std::string_view perk_mod_name = "MageGamplayOverhaul.esp";
+
+    static RE::FormID ParseFormID(const std::string& str);
+
+
+    
+
 };
