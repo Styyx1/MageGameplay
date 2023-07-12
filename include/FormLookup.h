@@ -38,6 +38,7 @@ namespace FormLookup {
     { 
         const auto handler = RE::TESDataHandler::GetSingleton();
         const auto utility = Utility::GetSingleton();
+        
         utility->Spells = handler->LookupForm(0x13018, "Skyrim.esm")->As<RE::SpellItem>();
         logger::info("Loaded Spell: {}", utility->Spells->GetName());    
     }

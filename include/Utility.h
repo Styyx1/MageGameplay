@@ -18,28 +18,31 @@ public:
         return std::addressof(singleton);
     }
 
-    static bool WardSpell() { 
+    static bool WardSpell() {
         const auto player = RE::PlayerCharacter::GetSingleton();
+        const auto util = Utility::GetSingleton();
+        const auto spell_form_list = util->spell_formlist;
         auto spell = player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand];
-        const auto keyword_wards = spell->HasKeyword(ward_keyword);
-        if (keyword_wards)
-        {
+        if (Utility::is_in_list(spell->AsReference(), Utility::spell_formlist->AsReference())) { 
+            
             return true;
         }
     }
-
-    RE::SpellItem* IsInSpellList(RE::BGSListForm* formlist) 
+    inline static RE::MagicItem* WardCast() 
     { 
-        const auto spell_list = Utility::spell_formlist;
-        if (formlist->ContainsOnlyType(RE::FormType::Spell)) {
-            spell_list->GetAllForms();
-            return spell_list->GetAllForms()->As<RE::SpellItem>();           
+        const auto player = RE::PlayerCharacter::GetSingleton();
+        auto spell = player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand];
+        if (Utility::WardSpell()) {
+            logger::info("Ward spell = {}", spell->GetName());
+            return spell;
         }
     
     }
 
+    
+
     inline static RE::TESConditionItem cond_item;
-    inline static RE::TESCondition is_power_attacking;
+    inline static RE::TESCondition is_in_list;
     inline static RE::BGSPerk* AbsorbPerk;
     inline static RE::SpellItem* Spells;
     inline static RE::BGSKeyword* ward_keyword;
@@ -47,11 +50,11 @@ public:
     
 
     static void InitUtility() {
-        cond_item.data.comparisonValue.f = 1.0f;
-        cond_item.data.functionData.function = RE::FUNCTION_DATA::FunctionID::kIsPowerAttacking;
+        cond_item.data.comparisonValue.f = 1.0f;        
+        cond_item.data.functionData.function = RE::FUNCTION_DATA::FunctionID::kIsInList;
         
         
-        is_power_attacking.head = &cond_item;
+        is_in_list.head = &cond_item;
         logger::info("Utility initialised");
     }
 };
