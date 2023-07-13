@@ -21,16 +21,13 @@ void Settings::LoadSettings()
     block_regeneration_value = ini.GetDoubleValue("General", "fBlockRegenerationValue");
     cast_regeneration_value = ini.GetDoubleValue("General", "fCastRegenerationValue");
     std::string activation_perk = ini.GetValue("Perk", "uActivationPerk");
+    extra_logging = ini.GetBoolValue("Logging", "bExtraLogging");
     
     if (!activation_perk.empty()) {
         ActivationPerkFormID = ParseFormID(activation_perk);
     }
-
-    logger::info("PerkID = {}", Settings::ActivationPerkFormID);
-    
-    perk_mod_name = ini.GetValue("Perk", "sPerkModName");
-
-    
+    //logger::info("PerkID = {}", Settings::ActivationPerkFormID);    
+    perk_mod_name = ini.GetValue("Perk", "sPerkModName");    
 }
 RE::FormID Settings::ParseFormID(const std::string& str) {
     RE::FormID result;

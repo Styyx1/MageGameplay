@@ -10,13 +10,9 @@ void Listener(SKSE::MessagingInterface::Message* message) {
         Events::OnHitEventHandler::Register();
         Utility::InitUtility();
         Settings::LoadSettings();
-        logger::info("PerkID = {}", Settings::activation_perk);
         FormLookup::LoadPerk();
         FormLookup::LoadSpells();
-        //FormLookup::LoadFormList();
         //FormLookup::AdjustScrolls();
-        
-        
     }
 }
 
