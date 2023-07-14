@@ -18,7 +18,8 @@ namespace Events {
         auto attack_modifier = Settings::attack_regeneration_value * 0.01;  
         auto block_modifier = Settings::block_regeneration_value * 0.01;
         auto cast_modifier = Settings::cast_regeneration_value * 0.01;
-        const auto player = RE::PlayerCharacter::GetSingleton();       
+        const auto player = RE::PlayerCharacter::GetSingleton(); 
+        auto actor = a_event->cause.get()->As<RE::Actor>();
 
         // HitEvent: When player is above x% of x attribute, an attack/spell cast/"block with a ward" regenerates x% of the max attribute
         // Attributes:  Weapon in right hand regenerates x% of magicka
@@ -26,54 +27,52 @@ namespace Events {
         //              Ward spell in left hand regenerates x% of magicka when an attack hits you
 
         if (a_event->cause) {
-            if (a_event->cause->IsPlayerRef()) {
-                if (auto targ = a_event->target.get(); targ->As<RE::Actor>()) {
-                    if (!player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand] &&
-                        player->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand] &&
-                        player->HasPerk(Utility::AbsorbPerk)) {
-                        if (const auto equipped_right = player->GetEquippedObject(false)) {
+            if (a_event->cause.get() == actor->AsReference() && actor->Is3DLoaded()) {
+                if (auto targ = a_event->target.get(); targ->As<RE::Actor>() || targ->IsPlayerRef()) {
+                    if (!actor->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand] &&
+                        actor->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand] &&
+                        actor->HasPerk(Utility::AbsorbPerk)) {
+                        if (const auto equipped_right = actor->GetEquippedObject(false)) {
                             if (const auto weapon = equipped_right->As<RE::TESObjectWEAP>();
                                 weapon->IsOneHandedSword() || weapon->IsOneHandedAxe() || weapon->IsOneHandedMace()) {
                                 if (auto magicka_pct =
-                                        Hooks::GetActorValuePercent(player->As<RE::Actor>(), RE::ActorValue::kMagicka) *
+                                        Hooks::GetActorValuePercent(actor->As<RE::Actor>(), RE::ActorValue::kMagicka) *
                                         100;
-                                    const auto magicka_av = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
-                                    if (a_event->source == player->GetActorRuntimeData()
+                                    const auto magicka_av = actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
+                                    if (a_event->source == actor->GetActorRuntimeData()
                                                                .selectedSpells[RE::Actor::SlotTypes::kLeftHand]
                                                                ->GetFormID()) {                                        
-                                        if (const auto equipped_left = player->GetEquippedObject(true)) {
+                                        if (const auto equipped_left = actor->GetEquippedObject(true)) {
                                             if (!equipped_left->IsWeapon() &&
-                                                player->GetActorRuntimeData()
+                                                actor->GetActorRuntimeData()
                                                     .selectedSpells[RE::Actor::SlotTypes::kLeftHand]) {
                                                 
                                                 if (auto stam_pct =
-                                                        Hooks::GetActorValuePercent(player->As<RE::Actor>(),
+                                                        Hooks::GetActorValuePercent(actor->As<RE::Actor>(),
                                                                                     RE::ActorValue::kStamina) *
                                                         100;
-                                                    const auto stamina_av = player->AsActorValueOwner()->GetActorValue(
+                                                    const auto stamina_av = actor->AsActorValueOwner()->GetActorValue(
                                                         RE::ActorValue::kStamina)) {
-                                                    if (stam_pct <= Settings::trigger_value && player->IsInCombat()) {
-                                                        player->AsActorValueOwner()->RestoreActorValue(
+                                                    if (stam_pct <= Settings::trigger_value && actor->IsInCombat()) {
+                                                        actor->AsActorValueOwner()->RestoreActorValue(
                                                             RE::ACTOR_VALUE_MODIFIER::kDamage, RE::ActorValue::kStamina,
-                                                            player->AsActorValueOwner()->GetBaseActorValue(
+                                                            actor->AsActorValueOwner()->GetBaseActorValue(
                                                                 RE::ActorValue::kStamina) *
                                                                 cast_modifier);                                                        
                                                                 if (Settings::extra_logging == true)
-                                                                     logger::info("Absorbed {} % of stamina with casting", cast_modifier * 100);
+                                                            logger::info("{} absorbed {} % of stamina with casting",
+                                                                         actor->GetName(), cast_modifier * 100);
+                                                                
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    if (magicka_pct <= Settings::trigger_value && player->IsInCombat() &&
-                                        a_event->source == weapon->GetFormID()) {                                        
-                                        player->AsActorValueOwner()->RestoreActorValue(
-                                            RE::ACTOR_VALUE_MODIFIER::kDamage, av_to_heal,
-                                            player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
-                                                attack_modifier);                                        
-                                        if (Settings::extra_logging == true)
-                                            logger::info("Absorbed {} % of magicka with attacking",
-                                                         attack_modifier * 100);
+                                    if (magicka_pct <= Settings::trigger_value && actor->IsInCombat() &&
+                                        a_event->source == weapon->GetFormID()) {                                       
+                                        actor->AsActorValueOwner()->RestoreActorValue(RE::ACTOR_VALUE_MODIFIER::kDamage, av_to_heal, actor->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) * attack_modifier);                                        
+                                            if (Settings::extra_logging == true)
+                                                logger::info("{} absorbed {} % of magicka with attacking", actor->GetName(), attack_modifier * 100);
                                     }
                                 }
                             }
@@ -83,19 +82,20 @@ namespace Events {
             }           
         }
         if (a_event->target) {
-            if (a_event->target.get() == RE::PlayerCharacter::GetSingleton()) {
-                if (player->IsCasting(Utility::Spells)) {
+            if (a_event->target.get()) {
+                if (actor->IsCasting(Utility::Spells)) {
                     if (auto magicka_pct =
-                            Hooks::GetActorValuePercent(player->As<RE::Actor>(), RE::ActorValue::kMagicka) * 100;
-                        const auto magicka_av = player->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
-                        if (magicka_pct <= Settings::trigger_value && player->IsInCombat()) {
+                            Hooks::GetActorValuePercent(actor->As<RE::Actor>(), RE::ActorValue::kMagicka) * 100;
+                        const auto magicka_av = actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
+                        if (magicka_pct <= Settings::trigger_value && actor->IsInCombat()) {
                             
-                            player->AsActorValueOwner()->RestoreActorValue(
+                            actor->AsActorValueOwner()->RestoreActorValue(
                                 RE::ACTOR_VALUE_MODIFIER::kDamage, av_to_heal,
-                                player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
+                                actor->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
                                     block_modifier);                            
                             if (Settings::extra_logging == true)
-                                logger::info("Absorbed {} % of magicka with blocking", block_modifier * 100);
+                                logger::info("{} absorbed {} % of magicka with blocking",actor->GetName(),
+                                             block_modifier * 100);
                         }
                     }
                 }
