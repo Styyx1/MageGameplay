@@ -59,7 +59,7 @@ namespace Events {
                                                                 RE::ActorValue::kStamina) *
                                                                 cast_modifier);                                                        
                                                                 if (Settings::extra_logging == true)
-                                                                     logger::info("Absorbed {} % of stamina with casting", cast_modifier * 100);
+                                                            logger::info("{} absorbed {} % of stamina with casting",player->GetName(), cast_modifier * 100);
                                                     }
                                                 }
                                             }
@@ -72,8 +72,7 @@ namespace Events {
                                             player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
                                                 attack_modifier);                                        
                                         if (Settings::extra_logging == true)
-                                            logger::info("Absorbed {} % of magicka with attacking",
-                                                         attack_modifier * 100);
+                                            logger::info("{} absorbed {} % of magicka with attacking", player->GetName(), attack_modifier * 100);
                                     }
                                 }
                             }
@@ -95,7 +94,7 @@ namespace Events {
                                 player->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMagicka) *
                                     block_modifier);                            
                             if (Settings::extra_logging == true)
-                                logger::info("Absorbed {} % of magicka with blocking", block_modifier * 100);
+                                logger::info("{} absorbed {} % of magicka with blocking", player->GetName(), block_modifier * 100);
                         }
                     }
                 }
