@@ -19,7 +19,7 @@ namespace Events {
         auto block_modifier = Settings::block_regeneration_value * 0.01;
         auto cast_modifier = Settings::cast_regeneration_value * 0.01;
         const auto player = RE::PlayerCharacter::GetSingleton(); 
-        auto actor = a_event->cause.get()->As<RE::Actor>();
+        //auto actor = a_event->cause.get()->As<RE::Actor>();
 
         // HitEvent: When player is above x% of x attribute, an attack/spell cast/"block with a ward" regenerates x% of the max attribute
         // Attributes:  Weapon in right hand regenerates x% of magicka
@@ -27,14 +27,15 @@ namespace Events {
         //              Ward spell in left hand regenerates x% of magicka when an attack hits you
 
         if (a_event->cause) {
-            if (a_event->cause.get() == actor->AsReference() && actor->Is3DLoaded()) {
-                if (auto targ = a_event->target.get(); targ->As<RE::Actor>() || targ->IsPlayerRef()) {
-                    if (!actor->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand] &&
+            if (auto actor = a_event->cause.get()->As<RE::Actor>(); actor->Is3DLoaded()) {
+                if (auto targ = a_event->target.get()->As<RE::Actor>() || a_event->target.get()->IsPlayerRef()) {
+                    if (auto actor = a_event->cause.get()->As<RE::Actor>();
+                        !actor->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kRightHand] &&
                         actor->GetActorRuntimeData().selectedSpells[RE::Actor::SlotTypes::kLeftHand] &&
                         actor->HasPerk(Utility::AbsorbPerk)) {
                         if (const auto equipped_right = actor->GetEquippedObject(false)) {
                             if (const auto weapon = equipped_right->As<RE::TESObjectWEAP>();
-                                weapon->IsOneHandedSword() || weapon->IsOneHandedAxe() || weapon->IsOneHandedMace()) {
+                                weapon->IsOneHandedSword() || weapon->IsOneHandedAxe() || weapon->IsOneHandedMace() || weapon->IsOneHandedDagger()){
                                 if (auto magicka_pct =
                                         Hooks::GetActorValuePercent(actor->As<RE::Actor>(), RE::ActorValue::kMagicka) *
                                         100;
@@ -82,8 +83,8 @@ namespace Events {
             }           
         }
         if (a_event->target) {
-            if (a_event->target.get()) {
-                if (actor->IsCasting(Utility::Spells)) {
+            if (auto actor = a_event->target.get()->As<RE::Actor>()) {
+                if (a_event->target.get()->As<RE::Actor>()->IsCasting(Utility::Spells) || (a_event->target.get()->IsPlayerRef() && player->IsCasting(Utility::Spells))) {
                     if (auto magicka_pct =
                             Hooks::GetActorValuePercent(actor->As<RE::Actor>(), RE::ActorValue::kMagicka) * 100;
                         const auto magicka_av = actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kMagicka)) {
