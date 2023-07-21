@@ -31,7 +31,7 @@ set(sources
         src/Events.cpp
         src/Settings.cpp
         src/Hooks.cpp
-        src/EquipEventHandler.cpp
+        
 
         ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
 

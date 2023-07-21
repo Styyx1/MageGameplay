@@ -25,7 +25,7 @@ public:
     inline static RE::BGSListForm* spell_formlist{nullptr};
     inline static RE::TESObjectWEAP* staff_weapon{nullptr};
     inline static RE::BGSListForm* staff_formlist{nullptr};
-    inline static RE::BGSKeyword* weapTypeStaff;
+    inline static RE::BGSKeyword* weapTypeStaff{nullptr};
 
     
     static void InitUtility() {
@@ -36,13 +36,13 @@ public:
         is_in_list.head = &cond_item;
         logger::info("Utility initialised");
     }
-    inline static void GetSpellItem() 
+    /*static void GetSpellItem() 
     { 
         Utility::Spells = spell_formlist->As<RE::SpellItem>();
         logger::info("Loaded all spells from formlist");
     }
-    inline static void GetStaves() { 
+    static void GetStaves() { 
         Utility::staff_weapon = staff_formlist->As<RE::TESObjectWEAP>();
         logger::info("Loaded all forms from staff list");
-    }
+    }*/
 };
