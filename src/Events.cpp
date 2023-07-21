@@ -24,6 +24,7 @@ namespace Events {
         // Attributes:  Weapon in right hand regenerates x% of magicka
         //              Offensive spell in left hand regenerates x% of stamina
         //              Ward spell in left hand regenerates x% of magicka when an attack hits you
+        //              Won't work with daggers by design
 
         if (a_event->cause) {
             if (a_event->cause->IsPlayerRef()) {

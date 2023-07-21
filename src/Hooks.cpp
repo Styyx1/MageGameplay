@@ -5,4 +5,4 @@ namespace Hooks {
         REL::Relocation<decltype(&GetActorValuePercent)> func{ RELOCATION_ID(36347, 37337) };
         return func(a_actor, a_actorValue);
     }
-}
+}// Function call to get AV percentage used for absorbtion threshold

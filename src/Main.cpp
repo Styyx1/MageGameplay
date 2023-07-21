@@ -8,11 +8,12 @@
 void Listener(SKSE::MessagingInterface::Message* message) {
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
         Events::OnHitEventHandler::Register();
-        Utility::InitUtility();
+        Events::OnEquipHandler::Register();        
         Settings::LoadSettings();
         FormLookup::LoadPerk();
         FormLookup::LoadSpells();
-        //FormLookup::AdjustScrolls();
+        Utility::InitUtility();
+        //FormLookup::AdjustScrolls();        
     }
 }
 
