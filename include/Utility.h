@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Settings.h"
-#include "FormLookup.h"
 
 class Utility {
 protected:
@@ -23,10 +22,6 @@ public:
     inline static RE::BGSPerk* AbsorbPerk{nullptr};
     inline static RE::SpellItem* Spells{nullptr};
     inline static RE::BGSListForm* spell_formlist{nullptr};
-    inline static RE::TESObjectWEAP* staff_weapon{nullptr};
-    inline static RE::BGSListForm* staff_formlist{nullptr};
-    inline static RE::BGSKeyword* weapTypeStaff;
-
     
     static void InitUtility() {
         cond_item.data.comparisonValue.f = 1.0f;        
@@ -35,14 +30,5 @@ public:
         
         is_in_list.head = &cond_item;
         logger::info("Utility initialised");
-    }
-    inline static void GetSpellItem() 
-    { 
-        Utility::Spells = spell_formlist->As<RE::SpellItem>();
-        logger::info("Loaded all spells from formlist");
-    }
-    inline static void GetStaves() { 
-        Utility::staff_weapon = staff_formlist->As<RE::TESObjectWEAP>();
-        logger::info("Loaded all forms from staff list");
     }
 };
