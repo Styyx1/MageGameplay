@@ -23,7 +23,8 @@ configure_file(
 set(PUBLIC_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}")
 set(headers
         include/Utility.h
-        include/FormLookup.h)
+        include/FormLookup.h
+        include/EquipEventHandler.h)
 
 set(sources
         src/Logging.cpp
@@ -31,6 +32,11 @@ set(sources
         src/Events.cpp
         src/Settings.cpp
         src/Hooks.cpp
+<<<<<<< Updated upstream
+=======
+        src/EquipEventHandler.cpp
+        
+>>>>>>> Stashed changes
 
         ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
 

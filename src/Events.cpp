@@ -5,6 +5,7 @@
 #include "FormLookup.h"
 
 namespace Events {
+
     OnHitEventHandler* OnHitEventHandler::GetSingleton() {
         static OnHitEventHandler singleton;
         return std::addressof(singleton);
